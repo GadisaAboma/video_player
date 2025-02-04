@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/constants.dart';
-import 'package:video_player/video_player.dart';
+import 'package:video_player_app/constants.dart';
+import 'package:video_player_app/video_player.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
     "zNvlO3QKLbe5Yu0101yQO8SRUDeycIL01cLOB02dhAvjhho",
     "TU4tu02tS7702jWUDVk5275JZvlNgv5WmyT6kLcV6awDw",
     "WVy89Zrbw15xAy8nFAGRljwAGGZq36BwNZSckOz1HU4",
-    "ApFgkkaJc1SPL64C7XF2dA00Nh1iny00Dr67kVZxRptfQ"
+    "ApFgkkaJc1SPL64C7XF2dA00Nh1iny00Dr67kVZxRptfQ",
   ];
 
   @override
