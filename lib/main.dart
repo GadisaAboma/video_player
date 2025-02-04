@@ -14,21 +14,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<String> videoIds = [
-    "eFDFooCflDdkcFcYxeKDSXeyW00FA00nXeOoMJeakvVSA",
-    "w9qAyPlIaEAaeSuoB36r22xutGF800mXxZ00skcDKsjFc",
-    "g5CwrZaaTWYdjb2peU818fzGkSvASW00tHnziQAQJq5I",
-    "WrEk1kQpRcqAeTGCnrU00nJOUekJesdIL43NrYz01RYc",
-    "zNvlO3QKLbe5Yu0101yQO8SRUDeycIL01cLOB02dhAvjhho",
-    "TU4tu02tS7702jWUDVk5275JZvlNgv5WmyT6kLcV6awDw",
-    "WVy89Zrbw15xAy8nFAGRljwAGGZq36BwNZSckOz1HU4",
-    "ApFgkkaJc1SPL64C7XF2dA00Nh1iny00Dr67kVZxRptfQ",
-  ];
+  PageController pageController = PageController();
+  bool isDark = true;
+
+  void skipVideo(String type) {
+    if (type == "forward") {
+      pageController.nextPage(
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      pageController.previousPage(
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      darkTheme: ThemeData.dark(),
+      darkTheme: isDark ? ThemeData.dark() : ThemeData.light(),
       debugShowCheckedModeBanner: false,
       title: 'Video Streamer',
       theme: ThemeData(
@@ -37,15 +43,29 @@ class _MyAppState extends State<MyApp> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  isDark = !isDark;
+                });
+              },
+              icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+            ),
+          ],
+          centerTitle: false,
           title: const Text('Video Streamer'),
         ),
         body: PageView.builder(
+          controller: pageController,
           itemBuilder: (context, index) => Center(
             child: VideoPlayerWidget(
-                videoUrl: Constants.getVideoLink(videoIds[index])),
+              skipVideo: skipVideo,
+              videoUrl: Constants.getVideoLink(Constants.videoIds[index]),
+              index: index,
+            ),
           ),
-          itemCount: videoIds.length,
+          itemCount: Constants.videoIds.length,
         ),
       ),
     );

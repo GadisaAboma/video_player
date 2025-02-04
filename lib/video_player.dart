@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_player_app/constants.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   final String videoUrl;
+  final int index;
+  final Function(String) skipVideo;
 
-  const VideoPlayerWidget({super.key, required this.videoUrl});
+  const VideoPlayerWidget(
+      {super.key,
+      required this.videoUrl,
+      required this.index,
+      required this.skipVideo});
 
   @override
   State<VideoPlayerWidget> createState() => _VideoPlayerWidgetState();
@@ -72,21 +79,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
   @override
   void initState() {
     super.initState();
+    index = widget.index;
     setState(() {});
     videoLoad();
     animationController();
   }
 
-  //////////////////////////////////////////////
-  /// LOAD NEXT VIDEO AND ADS
-  ///
-  void nextVideoLoad() {
-    videoLoad();
-  }
-
-//////////////////////////////////////////////
-  /// LOAD NEXT VIDEO
-  ///
   void videoLoad() {
     _controller = VideoPlayerController.networkUrl(
       Uri.parse(widget.videoUrl),
@@ -100,12 +98,13 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
               exactSeconds = 0;
               playedSeconds = 0;
               playedMin = 0;
-              _controller!.play();
+              _controller!.pause();
 
               index = index + 1;
 
               return;
             }
+
             if (_currentPosition.inSeconds % 60 == 0) {
               playedSeconds = 0;
               playedMin = _currentPosition.inSeconds ~/ 60;
@@ -121,7 +120,10 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
 
         exactSeconds = _controller!.value.duration.inSeconds % 60;
         exactMin = _controller!.value.duration.inSeconds ~/ 60;
-        setState(() {});
+        _controller!.setLooping(true);
+        setState(() {
+          _controller!.play();
+        });
       });
   }
 
@@ -247,12 +249,8 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                                               const Duration(seconds: 5)
                                           ? null
                                           : () {
-                                              setState(() {
-                                                _controller!.pause();
-                                                index = index - 1;
-                                              });
                                               if (index > 0) {
-                                                nextVideoLoad();
+                                                widget.skipVideo("backward");
                                               }
                                             },
                                       child: previousVideoIcon(),
@@ -272,10 +270,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        index = index + 1;
-                                        setState(() {
-                                          _controller!.pause();
-                                        });
+                                        widget.skipVideo("forward");
                                       },
                                       child: nextVideoIcon(),
                                     ),
@@ -323,7 +318,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                                             width: double.infinity,
                                             alignment: Alignment.center,
                                             child: const Text(
-                                              "5s second back",
+                                              "<< 5s ",
                                               style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
@@ -377,7 +372,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                                             width: double.infinity,
                                             alignment: Alignment.center,
                                             child: const Text(
-                                              "5s second forward",
+                                              "5s >>",
                                               style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
@@ -462,7 +457,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
       child: Icon(
         Icons.skip_next_sharp,
         size: 30,
-        color: index >= 5 ? Colors.grey : Colors.white,
+        color: index >= Constants.videoIds.length ? Colors.grey : Colors.white,
       ),
     );
   }

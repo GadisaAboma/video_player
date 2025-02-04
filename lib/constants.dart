@@ -4,4 +4,15 @@ class Constants {
   static String getVideoLink(String videoId) {
     return "$baseUrl/$videoId.m3u8";
   }
+
+  static List<String> videoIds = [
+    "eFDFooCflDdkcFcYxeKDSXeyW00FA00nXeOoMJeakvVSA",
+    // "w9qAyPlIaEAaeSuoB36r22xutGF800mXxZ00skcDKsjFc",
+    "g5CwrZaaTWYdjb2peU818fzGkSvASW00tHnziQAQJq5I",
+    // "WrEk1kQpRcqAeTGCnrU00nJOUekJesdIL43NrYz01RYc",
+    "zNvlO3QKLbe5Yu0101yQO8SRUDeycIL01cLOB02dhAvjhho",
+    "TU4tu02tS7702jWUDVk5275JZvlNgv5WmyT6kLcV6awDw",
+    "WVy89Zrbw15xAy8nFAGRljwAGGZq36BwNZSckOz1HU4",
+    "ApFgkkaJc1SPL64C7XF2dA00Nh1iny00Dr67kVZxRptfQ",
+  ];
 }
